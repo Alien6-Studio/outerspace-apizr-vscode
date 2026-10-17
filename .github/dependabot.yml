@@ -1,0 +1,18 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: "/"
+    target-branch: "0.4.6"
+    schedule:
+      interval: weekly
+    groups:
+      build-tools:
+        patterns: ["*"]
+  - package-ecosystem: github-actions
+    directory: "/"
+    target-branch: "0.4.6"
+    schedule:
+      interval: monthly
+    groups:
+      actions:
+        patterns: ["*"]
