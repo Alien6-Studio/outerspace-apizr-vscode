@@ -21,7 +21,7 @@ test('installer cancellation and deadlines stop processes before returning', asy
     try {
         const marker = path.join(root, 'should-not-exist');
         const controller = new AbortController();
-        const work = installationCommand(process.execPath, ['-e', `setTimeout(()=>require('node:fs').writeFileSync(${JSON.stringify(marker)},'bad'),1000);setInterval(()=>{},1000)`], root, process.env, controller.signal);
+        const work = installationCommand(process.execPath, ['-e', `setTimeout(()=>require('node:fs').writeFileSync(process.argv[1],'bad'),1000);setInterval(()=>{},1000)`, marker], root, process.env, controller.signal);
         setTimeout(() => controller.abort(), 100);
         await assert.rejects(work, {code:'cancelled'});
         await assert.rejects(installationCommand(process.execPath, ['-e','setInterval(()=>{},1000)'], root, process.env, new AbortController().signal, 50), {code:'installation_timeout'});

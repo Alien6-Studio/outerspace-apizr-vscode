@@ -42,7 +42,8 @@ async function suite() {
         assert.equal(api.state().activeProcesses, 0);
         const status = await api.telemetry('preview');
         assert.equal(status.collection_enabled, false);
-        assert.equal(status.transmission_available, false);
+        assert.equal(status.transmission_available, true);
+        assert.equal(status.transmission_enabled, false);
         assert.equal(engineStarts, 0, 'Restricted Mode controls cannot launch an engine');
         proof.cases.push('restricted-workspace-no-engine');
     } else {
@@ -101,7 +102,9 @@ async function suite() {
         assert.equal(api.state().telemetryAllowed, '0', 'Global VS Code opt-out overrides explicit extension opt-in');
         const report = await api.telemetry('preview');
         assert.equal(report.collection_enabled, false);
-        assert.equal(report.transmission_available, false);
+        assert.equal(report.transmission_available, true);
+        assert.equal(report.transmission_enabled, false);
+        assert.equal(api.state().telemetryDelivery, "none");
         assert.deepEqual(JSON.parse(report.payload).events, []);
         await vscode.commands.executeCommand('apizr.telemetryDisable');
         proof.cases.push('global-telemetry-opt-out');

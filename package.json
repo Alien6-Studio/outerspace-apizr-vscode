@@ -126,7 +126,7 @@
       },
       {
         "command": "apizr.telemetryEnable",
-        "title": "Apizr: Enable local usage counters"
+        "title": "Apizr: Enable usage telemetry"
       },
       {
         "command": "apizr.telemetryDisable",
@@ -206,9 +206,10 @@
           "default": true,
           "scope": "application",
           "tags": [
-            "telemetry"
+            "telemetry",
+            "usesOnlineServices"
           ],
-          "description": "Enable bounded local usage counters when VS Code permits usage telemetry. Disable this setting to opt out. No reports are sent."
+          "description": "Send bounded usage counts when VS Code permits telemetry. Disable this setting to opt out. No code, paths, experiment data or identifiers are sent."
         },
         "apizr.projectRoot": {
           "type": "string",
