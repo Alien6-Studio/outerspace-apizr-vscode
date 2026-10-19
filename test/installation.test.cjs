@@ -8,8 +8,10 @@ const { requirement, installationCommand, ManagedEngine } = require('../out/inst
 const spec = require('../engine.json');
 
 test('managed installation admits only an exact official version or source commit', () => {
-    assert.match(requirement(spec), /^outerspace-apizr\[notebook\] @ git\+https:\/\/github.com\/Alien6-Studio\/outerspace-apizr.git@[a-f0-9]{40}$/);
-    assert.equal(requirement({ ...spec, source: { kind: 'pypi' } }), 'outerspace-apizr[notebook]==0.4.6');
+    assert.deepEqual(spec.source, { kind: 'pypi' });
+    assert.equal(requirement(spec), 'outerspace-apizr[notebook]==0.4.6');
+    const development = { ...spec, source: { kind: 'git', commit: 'a'.repeat(40) } };
+    assert.equal(requirement(development), 'outerspace-apizr[notebook] @ git+https://github.com/Alien6-Studio/outerspace-apizr.git@' + 'a'.repeat(40));
     for (const source of [{kind:'git',commit:'main'}, {kind:'git',commit:'x; echo secret'}, {kind:'url',url:'https://example.com'}]) {
         assert.throws(() => requirement({...spec, source}), {code:'invalid_engine_spec'});
     }
@@ -21,7 +23,7 @@ test('installer cancellation and deadlines stop processes before returning', asy
     try {
         const marker = path.join(root, 'should-not-exist');
         const controller = new AbortController();
-        const work = installationCommand(process.execPath, ['-e', `setTimeout(()=>require('node:fs').writeFileSync(${JSON.stringify(marker)},'bad'),1000);setInterval(()=>{},1000)`], root, process.env, controller.signal);
+        const work = installationCommand(process.execPath, ['-e', `setTimeout(()=>require('node:fs').writeFileSync(process.argv[1],'bad'),1000);setInterval(()=>{},1000)`, marker], root, process.env, controller.signal);
         setTimeout(() => controller.abort(), 100);
         await assert.rejects(work, {code:'cancelled'});
         await assert.rejects(installationCommand(process.execPath, ['-e','setInterval(()=>{},1000)'], root, process.env, new AbortController().signal, 50), {code:'installation_timeout'});
@@ -40,7 +42,8 @@ test('managed environments are reused only for the bundled source identity and c
         const python = path.join(root,directory,'bin','python');
         await fs.writeFile(python,'not executed', {mode:0o700});
         const identity = crypto.createHash('sha256').update(requirement(spec)).digest('hex');
-        for (const marker of [{identity:'wrong',directory},{identity,directory:'../outside'}]) {
+        const developmentIdentity = crypto.createHash('sha256').update(requirement({ ...spec, source: { kind: 'git', commit: 'a'.repeat(40) } })).digest('hex');
+        for (const marker of [{identity:'wrong',directory},{identity:developmentIdentity,directory},{identity,directory:'../outside'}]) {
             await fs.writeFile(path.join(root,'engine.json'),JSON.stringify(marker));
             assert.equal(await engine.installed(),undefined);
         }

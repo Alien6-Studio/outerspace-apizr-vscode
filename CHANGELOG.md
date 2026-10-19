@@ -5,9 +5,9 @@
 - Apizr Activity Bar, experiment dashboard and local CLI/SDK/Jupyter history.
 - Recorded metrics/parameters, canonical Run details and comparison.
 - Python CodeLens/title actions and Jupyter notebook toolbar integration.
-- Managed CLI installation and a terminal using that environment.
+- Managed installation of the matching PyPI CLI and a terminal using that environment.
 - Dedicated source repository and independent client CI.
-- Local usage counters follow VS Code telemetry permission by default, with a
-  separate Apizr opt-out and no report transmission.
+- Bounded usage telemetry follows VS Code permission by default, with a separate
+  opt-out. Reports contain only operation/outcome counts.
 
 No registry release has been published from this repository.

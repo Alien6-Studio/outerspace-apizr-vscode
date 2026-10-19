@@ -8,6 +8,7 @@ import { stringify } from "./json";
 import { Dashboard, captureLabel, sourceReference } from "./dashboard";
 import { inspectionLenses, sourceUri } from "./workbench";
 import { EngineSpec, InstalledEngine, ManagedEngine } from "./installation";
+import { TELEMETRY_ENDPOINT, UsageTelemetry } from "./telemetry";
 
 export function activate(context: vscode.ExtensionContext) {
     const spec: EngineSpec = JSON.parse(readFileSync(vscode.Uri.joinPath(context.extensionUri, "engine.json").fsPath, "utf8"));
@@ -60,7 +61,9 @@ export function activate(context: vscode.ExtensionContext) {
     let historyFolder: vscode.Uri | undefined;
     let inspectionGeneration = 0, historyGeneration = 0;
 
-    const cancel = () => { managed.cancel(); for (const client of clients) { client.cancel(); } };
+    const delivery = new UsageTelemetry(() => vscode.workspace.isTrusted && usageAllowed());
+    context.subscriptions.push(delivery);
+    const cancel = () => { delivery.clear(); managed.cancel(); for (const client of clients) { client.cancel(); } };
     const reportError = (error: unknown) => {
         const message = error instanceof EngineError ? `${error.code}: ${error.message}` : "operation_failed: Check the selected engine, saved source and operator configuration.";
         void vscode.window.showErrorMessage(`Apizr — ${message}`);
@@ -75,7 +78,7 @@ export function activate(context: vscode.ExtensionContext) {
             try { return await action(client, controller.signal); }
             finally {
                 subscription?.dispose(); clients.delete(client);
-                if (usageAllowed() && client.lastPreview) { lastReport = client.lastPreview; }
+                if (usageAllowed() && client.lastPreview) { lastReport = client.lastPreview; void delivery.submit(lastReport); }
                 else if (!usageAllowed()) { lastReport = undefined; }
             }
         };
@@ -181,7 +184,8 @@ export function activate(context: vscode.ExtensionContext) {
         let result: { [key: string]: Json };
         if (action === "preview" && usageAllowed() && lastReport) { result = lastReport; }
         else if (!vscode.workspace.isTrusted) { result = { collection_enabled: false, transmission_available: false, reason: "workspace_untrusted", payload: JSON.stringify({ schema_version: "apizr.telemetry/v1", context: "vscode", events: [] }) }; }
-        else { result = await run(activeSource(), false, "Local telemetry " + action, (client, signal) => client.telemetry(action, signal)); }
+        else { result = await run(activeSource(), false, "Telemetry " + action, (client, signal) => client.telemetry(action, signal)); }
+        result = { ...result, endpoint: TELEMETRY_ENDPOINT, transmission_available: true, transmission_enabled: vscode.workspace.isTrusted && usageAllowed() && result.collection_enabled === true, last_delivery: delivery.lastDelivery };
         await documents.show("telemetry-" + action, result); return result;
     }
     async function selectEngine(): Promise<void> {
@@ -265,5 +269,5 @@ export function activate(context: vscode.ExtensionContext) {
     if (vscode.workspace.isTrusted && folder && vscode.workspace.getConfiguration("apizr", folder.uri).get("engine.mode", "managed") === "managed") {
         void managed.installed().then(value => { if (!value) { return offerInstallation(); } }).catch(reportError);
     }
-    return { inspect, refreshRuns, showRun, compare, telemetry, state: () => ({ stale, inspection: lastInspection, history: lastHistory, activeProcesses: clients.size, telemetryAllowed: childEnvironment().APIZR_TELEMETRY_ALLOWED }) };
+    return { inspect, refreshRuns, showRun, compare, telemetry, state: () => ({ stale, inspection: lastInspection, history: lastHistory, activeProcesses: clients.size, telemetryAllowed: childEnvironment().APIZR_TELEMETRY_ALLOWED, telemetryDelivery: delivery.lastDelivery }) };
 }
