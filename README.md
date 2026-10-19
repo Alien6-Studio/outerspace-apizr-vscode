@@ -1,11 +1,11 @@
 # Apizr for VS Code
 
 [![CI](https://github.com/Alien6-Studio/outerspace-apizr-vscode/actions/workflows/ci.yml/badge.svg?branch=0.4.6)](https://github.com/Alien6-Studio/outerspace-apizr-vscode/actions/workflows/ci.yml)
-[![License: GPL-3.0-or-later](https://img.shields.io/badge/license-GPL--3.0--or--later-blue)](LICENSE)
+[![License: GPL-3.0-or-later](https://img.shields.io/badge/license-GPL--3.0--or--later-blue)](https://github.com/Alien6-Studio/outerspace-apizr-vscode/blob/2d3f8a052ef0aea5779319423eaf4cdd2487258d/LICENSE)
 
 Inspect Python and notebooks, browse local experiment history and compare Runs.
 
-![Apizr experiment dashboard with real Wine classification Runs](media/screenshots/experiments.png)
+![Apizr experiment dashboard with real Wine classification Runs](https://raw.githubusercontent.com/Alien6-Studio/outerspace-apizr-vscode/2d3f8a052ef0aea5779319423eaf4cdd2487258d/media/screenshots/experiments.png)
 
 These are actual SDK and Jupyter executions on the public
 [UCI Wine dataset](https://archive.ics.uci.edu/dataset/109/wine), shown in the
@@ -14,7 +14,7 @@ retained Runs; the interface delegates history validation to the Apizr engine.
 
 Short walkthrough using captured views of the running extension:
 
-![Review measured Runs, inspect source and compare results](media/screenshots/run-review.gif)
+![Review measured Runs, inspect source and compare results](https://raw.githubusercontent.com/Alien6-Studio/outerspace-apizr-vscode/2d3f8a052ef0aea5779319423eaf4cdd2487258d/media/screenshots/run-review.gif)
 
 [Repeat the illustrated Academy lesson](https://apizr.outerspace.sh/academy/vscode/)
 to train the models, inspect saved source and compare their results.
@@ -31,7 +31,7 @@ parameters and Run details. Python editor shortcuts and the notebook toolbar
 inspect saved code without executing it. **Apizr: Open CLI terminal** makes the
 installed CLI available in a terminal. Existing CLI environments remain selectable.
 
-![Inspect the saved Wine experiment source without executing it](media/screenshots/inspection.png)
+![Inspect the saved Wine experiment source without executing it](https://raw.githubusercontent.com/Alien6-Studio/outerspace-apizr-vscode/2d3f8a052ef0aea5779319423eaf4cdd2487258d/media/screenshots/inspection.png)
 
 The managed installer uses the exact PyPI release
 `outerspace-apizr[notebook]==0.4.6`.
@@ -42,4 +42,4 @@ code, paths and experiment data stay local.
 [Privacy policy](https://apizr.outerspace.sh/about/telemetry/).
 
 [Setup guide](https://apizr.outerspace.sh/reference/vscode/) ·
-[Contributing](CONTRIBUTING.md) · [Engine](https://github.com/Alien6-Studio/outerspace-apizr)
+[Contributing](https://github.com/Alien6-Studio/outerspace-apizr-vscode/blob/2d3f8a052ef0aea5779319423eaf4cdd2487258d/CONTRIBUTING.md) · [Engine](https://github.com/Alien6-Studio/outerspace-apizr)
