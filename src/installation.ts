@@ -48,7 +48,7 @@ export async function installationCommand(command: string, args: string[], cwd: 
             if (failure) { stop("SIGKILL"); }
             clearTimeout(deadline); if (force) { clearTimeout(force); } signal.removeEventListener("abort", cancel);
             if (failure) { reject(failure); }
-            else if (code !== 0) { reject(new EngineError("installation_failed", "The installer failed. Check Python, Git and network access, then retry or select an existing engine.")); }
+            else if (code !== 0) { reject(new EngineError("installation_failed", "The installer failed. Check Python, network access and availability of the requested CLI version, then retry or select an existing engine.")); }
             else { resolve(Buffer.concat(output).toString("utf8").trim()); }
         });
     });

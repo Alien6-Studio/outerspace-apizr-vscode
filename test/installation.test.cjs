@@ -8,8 +8,10 @@ const { requirement, installationCommand, ManagedEngine } = require('../out/inst
 const spec = require('../engine.json');
 
 test('managed installation admits only an exact official version or source commit', () => {
-    assert.match(requirement(spec), /^outerspace-apizr\[notebook\] @ git\+https:\/\/github.com\/Alien6-Studio\/outerspace-apizr.git@[a-f0-9]{40}$/);
-    assert.equal(requirement({ ...spec, source: { kind: 'pypi' } }), 'outerspace-apizr[notebook]==0.4.6');
+    assert.deepEqual(spec.source, { kind: 'pypi' });
+    assert.equal(requirement(spec), 'outerspace-apizr[notebook]==0.4.6');
+    const development = { ...spec, source: { kind: 'git', commit: 'a'.repeat(40) } };
+    assert.equal(requirement(development), 'outerspace-apizr[notebook] @ git+https://github.com/Alien6-Studio/outerspace-apizr.git@' + 'a'.repeat(40));
     for (const source of [{kind:'git',commit:'main'}, {kind:'git',commit:'x; echo secret'}, {kind:'url',url:'https://example.com'}]) {
         assert.throws(() => requirement({...spec, source}), {code:'invalid_engine_spec'});
     }
@@ -40,7 +42,8 @@ test('managed environments are reused only for the bundled source identity and c
         const python = path.join(root,directory,'bin','python');
         await fs.writeFile(python,'not executed', {mode:0o700});
         const identity = crypto.createHash('sha256').update(requirement(spec)).digest('hex');
-        for (const marker of [{identity:'wrong',directory},{identity,directory:'../outside'}]) {
+        const developmentIdentity = crypto.createHash('sha256').update(requirement({ ...spec, source: { kind: 'git', commit: 'a'.repeat(40) } })).digest('hex');
+        for (const marker of [{identity:'wrong',directory},{identity:developmentIdentity,directory},{identity,directory:'../outside'}]) {
             await fs.writeFile(path.join(root,'engine.json'),JSON.stringify(marker));
             assert.equal(await engine.installed(),undefined);
         }

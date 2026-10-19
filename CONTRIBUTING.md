@@ -16,6 +16,8 @@ iteration. Install it with `code --install-extension dist/apizr-0.4.6.vsix --for
 The fast CI qualifies the client independently. The engine repository runs native
 VS Code/SSH and CLI/SDK/Jupyter integration against the pinned client snapshot and
 candidate engine. No workflow in this repository publishes an extension or engine.
+Publish and verify the exact CLI version on PyPI before the Marketplace VSIX.
+During preparation, use **Apizr: Select engine** for an existing development CLI.
 
 Sign commits with `git commit -s`. Report product bugs in this repository; include
 VS Code/engine versions and a minimal sanitized example, without private Run data.

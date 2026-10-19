@@ -9,7 +9,7 @@ Inspect Python and notebooks, browse local experiment history and compare Runs.
 
 These are actual SDK and Jupyter executions on the public
 [UCI Wine dataset](https://archive.ics.uci.edu/dataset/109/wine), shown in the
-0.4.6 development extension. Parameters, accuracy and macro F1 come from the
+0.4.6 extension. Parameters, accuracy and macro F1 come from the
 retained Runs; the interface delegates history validation to the Apizr engine.
 
 Short walkthrough using captured views of the running extension:
@@ -21,7 +21,7 @@ to train the models, inspect saved source and compare their results.
 
 ## Get started
 
-1. Install the development VSIX in **VS Code 1.140+** and open a trusted project.
+1. Install the Apizr VSIX in **VS Code 1.140+** and open a trusted project.
 2. Accept **Install CLI**. Apizr installs its CLI and notebook support in a managed
    environment, then selects it automatically. Python 3.11–3.15 is required.
 3. Configure your `apizr.toml` and operator policy in **Apizr: Open settings**.
@@ -33,8 +33,8 @@ installed CLI available in a terminal. Existing CLI environments remain selectab
 
 ![Inspect the saved Wine experiment source without executing it](media/screenshots/inspection.png)
 
-**0.4.6 is under review.** The managed installer uses a pinned official source
-commit; no Marketplace or PyPI publication is enabled here.
+The managed installer uses the exact PyPI release
+`outerspace-apizr[notebook]==0.4.6`.
 
 Usage telemetry follows VS Code’s permission by default. Disable
 `apizr.telemetry.enabled` to opt out. Only operation/outcome counts are sent;
