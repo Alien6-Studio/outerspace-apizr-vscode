@@ -69,7 +69,7 @@ def manifest(package):
         ("Description", package["description"]),
         ("Categories", ",".join(package["categories"])),
         ("GalleryFlags", "Public"),
-        ("License", "extension/LICENSE"),
+        ("License", "extension/LICENSE.txt"),
         ("Icon", "extension/" + package["icon"]),
     ):
         child(metadata, tag, text=text)
@@ -92,7 +92,7 @@ def manifest(package):
     for kind, filename in (
         ("Microsoft.VisualStudio.Code.Manifest", "package.json"),
         ("Microsoft.VisualStudio.Services.Content.Details", "README.md"),
-        ("Microsoft.VisualStudio.Services.Content.License", "LICENSE"),
+        ("Microsoft.VisualStudio.Services.Content.License", "LICENSE.txt"),
         ("Microsoft.VisualStudio.Services.Icons.Default", package["icon"]),
     ):
         child(
@@ -111,7 +111,7 @@ def build(output, version=None):
         package["version"] = version
     payload = {
         "extension/package.json": (json.dumps(package, indent=2) + "\n").encode(),
-        "extension/LICENSE": (ROOT / "LICENSE").read_bytes(),
+        "extension/LICENSE.txt": (ROOT / "LICENSE").read_bytes(),
     }
     for filename in (
         "README.md",
@@ -144,7 +144,7 @@ def build(output, version=None):
             )
     payload["extension.vsixmanifest"] = manifest(package)
     payload["[Content_Types].xml"] = (
-        b'<?xml version="1.0" encoding="utf-8"?>\n<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension=".json" ContentType="application/json"/><Default Extension=".js" ContentType="application/javascript"/><Default Extension=".ts" ContentType="text/plain"/><Default Extension=".md" ContentType="text/markdown"/><Default Extension=".png" ContentType="image/png"/><Default Extension=".gif" ContentType="image/gif"/><Default Extension=".vsixmanifest" ContentType="text/xml"/></Types>\n'
+        b'<?xml version="1.0" encoding="utf-8"?>\n<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension=".json" ContentType="application/json"/><Default Extension=".js" ContentType="application/javascript"/><Default Extension=".ts" ContentType="text/plain"/><Default Extension=".txt" ContentType="text/plain"/><Default Extension=".md" ContentType="text/markdown"/><Default Extension=".png" ContentType="image/png"/><Default Extension=".gif" ContentType="image/gif"/><Default Extension=".vsixmanifest" ContentType="text/xml"/></Types>\n'
     )
     path = output / f"apizr-{package['version']}.vsix"
     with zipfile.ZipFile(path, "w", compression=zipfile.ZIP_STORED) as archive:
