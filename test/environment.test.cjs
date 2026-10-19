@@ -13,9 +13,9 @@ test('every child inherits the stricter global and Apizr usage decision', () => 
     try {
         delete process.env.APIZR_TELEMETRY; delete process.env.APIZR_TELEMETRY_ALLOWED; delete process.env.CI; delete process.env.APIZR_SERVED_PROCESS; delete process.env.APIZR_EXPERIMENT_RUNNER;
         process.env.PYTHONPATH = '/untrusted'; process.env.PYTHONHOME = '/untrusted';
-        for (const enabled of [false, true]) for (const global of ['all', 'error', 'crash', 'off']) for (const api of [false, true]) {
+        for (const enabled of [undefined, false, true]) for (const global of ['all', 'error', 'crash', 'off']) for (const api of [false, true]) {
             values = { 'apizr.telemetry.enabled': enabled, 'telemetry.telemetryLevel': global }; telemetryEnabled = api;
-            const expected = enabled && global === 'all' && api;
+            const expected = enabled !== false && global === 'all' && api;
             assert.equal(usageAllowed(), expected);
             const env = childEnvironment(); assert.equal(env.APIZR_TELEMETRY_ALLOWED, expected ? '1' : '0'); assert.equal(env.APIZR_TELEMETRY, expected ? '1' : '0');
             assert.equal(env.APIZR_TELEMETRY_CONTEXT, 'vscode'); assert.equal(env.PYTHONPATH, undefined); assert.equal(env.PYTHONHOME, undefined);

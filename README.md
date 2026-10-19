@@ -36,5 +36,9 @@ installed CLI available in a terminal. Existing CLI environments remain selectab
 **0.4.6 is under review.** The managed installer uses a pinned official source
 commit; no Marketplace or PyPI publication is enabled here.
 
+Local usage counters follow VS Code’s telemetry permission by default. Disable
+`apizr.telemetry.enabled` to opt out. No reports are sent.
+[Privacy policy](https://apizr.outerspace.sh/about/telemetry/).
+
 [Setup guide](https://apizr.outerspace.sh/reference/vscode/) ·
 [Contributing](CONTRIBUTING.md) · [Engine](https://github.com/Alien6-Studio/outerspace-apizr)

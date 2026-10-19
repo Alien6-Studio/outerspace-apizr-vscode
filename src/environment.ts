@@ -4,7 +4,7 @@ import { InstalledEngine } from "./installation";
 import { EngineError, Settings } from "./engine";
 
 export function usageAllowed(): boolean {
-    return vscode.env.isTelemetryEnabled && vscode.workspace.getConfiguration("telemetry").get("telemetryLevel", "all") === "all" && vscode.workspace.getConfiguration("apizr").get("telemetry.enabled", false) && process.env.APIZR_TELEMETRY !== "0" && (process.env.APIZR_TELEMETRY_ALLOWED ?? "1") === "1" && ["", "0", "false"].includes((process.env.CI ?? "").toLowerCase()) && process.env.APIZR_SERVED_PROCESS !== "1" && process.env.APIZR_EXPERIMENT_RUNNER !== "1";
+    return vscode.env.isTelemetryEnabled && vscode.workspace.getConfiguration("telemetry").get("telemetryLevel", "all") === "all" && vscode.workspace.getConfiguration("apizr").get("telemetry.enabled", true) && process.env.APIZR_TELEMETRY !== "0" && (process.env.APIZR_TELEMETRY_ALLOWED ?? "1") === "1" && ["", "0", "false"].includes((process.env.CI ?? "").toLowerCase()) && process.env.APIZR_SERVED_PROCESS !== "1" && process.env.APIZR_EXPERIMENT_RUNNER !== "1";
 }
 export function childEnvironment(): NodeJS.ProcessEnv {
     const allowed = usageAllowed();

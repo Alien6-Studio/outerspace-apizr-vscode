@@ -203,12 +203,12 @@
         },
         "apizr.telemetry.enabled": {
           "type": "boolean",
-          "default": false,
+          "default": true,
           "scope": "application",
           "tags": [
             "telemetry"
           ],
-          "description": "Opt in to bounded local usage counters. VS Code global telemetry restrictions win. No production transmission is available."
+          "description": "Enable bounded local usage counters when VS Code permits usage telemetry. Disable this setting to opt out. No reports are sent."
         },
         "apizr.projectRoot": {
           "type": "string",
