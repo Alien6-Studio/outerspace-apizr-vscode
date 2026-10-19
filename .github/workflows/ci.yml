@@ -30,6 +30,8 @@ jobs:
           python-version: '3.14'
       - run: npm ci --ignore-scripts --no-audit --no-fund
       - run: npm test
+      - name: Verify Marketplace asset parts and unchanged licence text
+        run: python3 -m unittest discover -s test -p 'test_distribution.py'
       - run: npm audit --include=prod --include=dev --include=optional --include=peer --audit-level=low
       - run: npm run package
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
