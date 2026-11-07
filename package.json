@@ -339,6 +339,6 @@
   "devDependencies": {
     "typescript": "5.9.3",
     "@types/node": "22.20.5",
-    "@types/vscode": "1.140.0"
+    "@types/vscode": "1.145.0"
   }
 }
